@@ -9,7 +9,7 @@ pipeline {
     environment {
         DOCKERHUB_USERNAME = credentials('dockerhub-username') 
         DOCKERHUB_PASSWORD = credentials('dockerhub-password') 
-        IMAGE_NAME = "chrisncs/simple-pipeline:latest"
+        IMAGE_NAME = "chrisncs/simple-pipeline-gtp-node:latest"
     }
 
     stages {
