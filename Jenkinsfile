@@ -19,17 +19,20 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t $IMAGE_NAME .'
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         sh 'docker build -t $IMAGE_NAME .'
+        //     }
+        // }
 
-        stage('Login to DockerHub') {
+        stage('Login, Build and Push Docker Image') {
             steps {
-                sh '''
-                    echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-                '''
+                script {
+                    withDockerRegistry(credentialsId: 'docker-hub-credentials', url:'') {
+                        def image = docker.image("$IMAGE_NAME")
+                        image.push()
+                    }     
+                }
             }
         }
 
