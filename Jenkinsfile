@@ -22,7 +22,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    sh 'docker build -t $IMAGE_NAME .'   
+                    sh 'sudo docker build -t $IMAGE_NAME .'   
                 }
             }
         }
@@ -30,8 +30,8 @@ pipeline {
         stage('Push Image') {
             steps {
                 script {
-                    sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
-                    sh "docker push $IMAGE_NAME"
+                    sh "sudo docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+                    sh "sudo docker push $IMAGE_NAME"
                 }
             }
         }
