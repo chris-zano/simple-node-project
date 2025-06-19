@@ -9,7 +9,7 @@ pipeline {
     environment {
         DOCKERHUB_USERNAME = credentials('dockerhub-username') 
         DOCKERHUB_PASSWORD = credentials('dockerhub-password') 
-        IMAGE_NAME = "chrisncs/simple-pipeline-gtp-node:latest"
+        IMAGE_NAME = "your-dockerhub-username/simple-pipeline-gtp-node:latest"
     }
 
     stages {
@@ -19,26 +19,20 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Image') {
-        //     steps {
-        //         sh 'docker build -t $IMAGE_NAME .'
-        //     }
-        // }
-
-        stage('Login, Build and Push Docker Image') {
+        stage('Build Image') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'docker-hub-credentials', url:'') {
-                        def image = docker.image("$IMAGE_NAME")
-                        image.push()
-                    }     
+                    sh 'docker build -t $IMAGE_NAME .'   
                 }
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('Push Image') {
             steps {
-                sh 'docker push $IMAGE_NAME'
+                script {
+                    sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
+                    sh "docker push $IMAGE_NAME"
+                }
             }
         }
     }
